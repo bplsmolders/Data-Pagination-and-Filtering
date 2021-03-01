@@ -77,7 +77,7 @@ function addPagination (list){
   When there is at least 1 student being diplayed, the created buttons will have the class active applied
   If there are now students displayed, the message 'no Results' is displayed
   */
-  if (list.length > 1){
+  if (list.length > 0){
   const firstButton = linkList.firstElementChild;
   firstButton.className = 'active';
   linkList.addEventListener('click', (e) => {
