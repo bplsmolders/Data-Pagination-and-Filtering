@@ -31,6 +31,7 @@ searchButton.appendChild(image);
 
 //This function will create and insert/append the elements needed to display a "page" of nine students
 const perPage = 9;
+
 function showPage (list, page){
   const startIndex = (page * perPage) - perPage;
   const endIndex = (page * perPage);
@@ -74,19 +75,22 @@ function addPagination (list){
   }
 
   /*
-  When there is at least 1 student being diplayed, the created buttons will have the class active applied
-  If there are now students displayed, the message 'no Results' is displayed
+  When there is at least 1 student being diplayed, the created buttons will have the class active applied.
+  If there are now students displayed, the message 'no Results' is displayed.
   */
   if (list.length > 0){
-  const firstButton = linkList.firstElementChild;
-  firstButton.className = 'active';
-  linkList.addEventListener('click', (e) => {
-    if (e.target.className !== 'active'){
-      let activeButton = document.querySelector('.active')
-      activeButton.className = '';
-      e.target.className = 'active';
-      let page = e.target.textContent;
-      showPage(data, page);
+    const firstButton = linkList.firstElementChild.firstElementChild;
+    firstButton.className = 'active';
+    linkList.addEventListener('click', (e) => {
+      if (e.target.className !== 'active'){
+        let activeButton = document.querySelector('.active')
+        activeButton.className = '';
+        e.target.className = 'active';
+        let page = e.target.textContent;
+        if (filteredList.length>0){
+          list = filteredList
+        }
+        showPage(list, page);
       }
     });
   } else {
@@ -100,15 +104,12 @@ function addPagination (list){
   return linkList;
   }
 
-// Calls functions
-showPage (data, 1);
-addPagination(data);
-
 // Underneath the search filter is activated when the user hits enter or the searchbutton.
+// The filteredList is returned to keep the search results active while switching pages.
+let filteredList = [];
 label.addEventListener ('change', (e)=> {
-  e.preventDefault();
+  filteredList = [];
   let text = input.value.toLowerCase();
-  let filteredList = [];
   for (let i = 0; i <data.length ; i++){
     if (data[i].name.first.toLowerCase().includes(text) || data[i].name.last.toLowerCase().includes(text) ){
       filteredList = filteredList.concat(data[i]);
@@ -116,4 +117,8 @@ label.addEventListener ('change', (e)=> {
   }
   showPage(filteredList, 1);
   addPagination(filteredList);
+  return filteredList
 });
+
+showPage (data, 1);
+addPagination(data);
